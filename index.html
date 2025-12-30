@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>365天存錢挑戰計畫</title>
+    <style>
+        :root {
+            --primary-color: #ff8a80;
+            --secondary-color: #fce4ec;
+            --accent-color: #4db6ac;
+            --bg-color: #f5f7fa;
+            --text-color: #37474f;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        h1 { text-align: center; color: var(--primary-color); margin-bottom: 10px; }
+        
+        /* 進度條樣式 */
+        .stats-card {
+            background: var(--secondary-color);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+
+        .stat-item span { display: block; font-size: 0.9em; color: #888; }
+        .stat-item strong { font-size: 1.5em; color: var(--primary-color); }
+
+        .progress-container {
+            width: 100%;
+            background: #eee;
+            border-radius: 10px;
+            height: 20px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: width 0.5s ease;
+        }
+
+        /* 網格樣式 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            gap: 8px;
+        }
+
+        .day-box {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .day-box:hover { transform: scale(1.1); border-color: var(--primary-color); }
+        .day-box.checked {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        .footer { text-align: center; margin-top: 20px; font-size: 0.8em; color: #aaa; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📅 365天存錢挑戰</h1>
+    
+    <div class="stats-card">
+        <div class="stat-item">
+            <span>累積金額</span>
+            <strong id="total-amount">$0</strong>
+        </div>
+        <div class="stat-item">
+            <span>已完成天數</span>
+            <strong id="completed-days">0 / 365</strong>
+        </div>
+        <div class="stat-item">
+            <span>達成率</span>
+            <strong id="percent">0%</strong>
+        </div>
+    </div>
+
+    <div class="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <div class="grid" id="grid-container">
+        </div>
+
+    <div class="footer">
+        點擊方格標記完成，資料將自動儲存於此瀏覽器中。
+    </div>
+</div>
+
+<script>
+    const gridContainer = document.getElementById('grid-container');
+    const totalAmountEl = document.getElementById('total-amount');
+    const completedDaysEl = document.getElementById('completed-days');
+    const percentEl = document.getElementById('percent');
+    const progressBar = document.getElementById('progress-bar');
+
+    // 從 LocalStorage 讀取已儲存的資料
+    let savedData = JSON.parse(localStorage.getItem('saveMoneyChallenge')) || [];
+
+    function init() {
+        for (let i = 1; i <= 365; i++) {
+            const box = document.createElement('div');
+            box.classList.add('day-box');
+            if (savedData.includes(i)) box.classList.add('checked');
+            box.textContent = i;
+            
+            box.onclick = () => toggleDay(i, box);
+            gridContainer.appendChild(box);
+        }
+        updateStats();
+    }
+
+    function toggleDay(day, element) {
+        if (savedData.includes(day)) {
+            savedData = savedData.filter(d => d !== day);
+            element.classList.remove('checked');
+        } else {
+            savedData.push(day);
+            element.classList.add('checked');
+        }
+        localStorage.setItem('saveMoneyChallenge', JSON.stringify(savedData));
+        updateStats();
+    }
+
+    function updateStats() {
+        const count = savedData.length;
+        const total = savedData.reduce((sum, val) => sum + val, 0);
+        const percentage = ((count / 365) * 100).toFixed(1);
+
+        totalAmountEl.textContent = `$${total.toLocaleString()}`;
+        completedDaysEl.textContent = `${count} / 365`;
+        percentEl.textContent = `${percentage}%`;
+        progressBar.style.width = `${percentage}%`;
+    }
+
+    init();
+</script>
+
+</body>
+</html>
