@@ -8,9 +8,9 @@
         :root {
             --primary: #ff85a1; 
             --secondary: #fbb6ce;
-            --accent: #b794f4; 
+            --morandi-purple: #9a8c98; /* 莫蘭迪灰紫 */
             --bg: #fff5f7;
-            --text: #702459;
+            --text: #4a4e69; /* 莫蘭迪深灰藍 */
         }
         body {
             font-family: -apple-system, sans-serif;
@@ -29,102 +29,111 @@
             width: 100%;
             max-width: 400px;
             border-radius: 30px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(255, 133, 161, 0.2);
-            border: 4px solid var(--secondary);
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(255, 133, 161, 0.15);
+            border: 3px solid var(--secondary); /* 實線 */
         }
-        h1 { text-align: center; font-size: 24px; color: var(--primary); margin-bottom: 15px; }
+        h1 { text-align: center; font-size: 22px; color: var(--primary); margin-bottom: 20px; letter-spacing: 2px; }
         
-        /* 進度條樣式 */
+        /* 細版進度條 */
         .progress-section {
-            margin-bottom: 20px;
-            padding: 10px;
+            margin-bottom: 25px;
+            padding: 12px;
             background: #fff9fa;
-            border-radius: 20px;
-            border: 2px solid var(--secondary); /* 改為實線 */
+            border-radius: 15px;
+            border: 1px solid var(--secondary); /* 實線 */
         }
         .progress-text {
             display: flex;
             justify-content: space-between;
             font-weight: bold;
             color: var(--primary);
-            margin-bottom: 5px;
-            font-size: 14px;
+            margin-bottom: 8px;
+            font-size: 13px;
         }
         .progress-bar-bg {
-            background: #eee;
-            height: 24px;
-            border-radius: 12px;
-            overflow: hidden;
+            background: #f0f0f0;
+            height: 8px; /* 調細進度條 */
+            border-radius: 10px;
+            overflow: visible; /* 讓蝴蝶結可以突出來 */
             position: relative;
-            border: 1px solid var(--secondary);
+            border: 1px solid #e0e0e0;
         }
         .progress-bar-fill {
             background: var(--secondary);
             height: 100%;
             width: 0%;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
+            border-radius: 10px;
+            position: relative;
             transition: width 0.5s ease;
+        }
+        .bow-icon {
+            position: absolute;
+            right: -10px;
+            top: -8px;
+            font-size: 16px;
         }
 
         .stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 20px;
         }
         .stat-card {
-            background: #fff0f3;
-            padding: 10px;
+            background: #fffafa;
+            padding: 12px;
             border-radius: 15px;
             text-align: center;
-            border: 2px solid var(--secondary); /* 改為實線 */
+            border: 1px solid var(--secondary); /* 實線 */
         }
-        .stat-label { font-size: 12px; color: var(--primary); font-weight: bold; }
-        .stat-value { font-size: 18px; font-weight: 900; }
+        .stat-label { font-size: 11px; color: var(--morandi-purple); font-weight: bold; margin-bottom: 4px; }
+        .stat-value { font-size: 16px; font-weight: 900; color: var(--primary); }
 
+        /* 莫蘭迪灰紫加碼區 */
         .extra-box {
-            background: #fdf2ff;
-            border: 2px solid var(--accent); /* 改為實線 */
-            border-radius: 20px;
+            background: #f4f4f9;
+            border: 2px solid var(--morandi-purple); /* 莫蘭迪實線 */
+            border-radius: 18px;
             padding: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             text-align: center;
         }
         input {
-            width: 50%;
-            padding: 10px;
+            width: 45%;
+            padding: 8px 12px;
             border-radius: 10px;
-            border: 2px solid var(--secondary);
+            border: 1px solid var(--morandi-purple);
             outline: none;
-            font-size: 16px;
+            font-size: 15px;
+            color: var(--text);
+            background: white;
         }
         button {
-            background: var(--primary);
+            background: var(--morandi-purple);
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 8px 18px;
             border-radius: 10px;
             font-weight: bold;
+            margin-left: 5px;
         }
         .grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
+            gap: 6px;
         }
         .day {
             aspect-ratio: 1;
             background: white;
-            border: 1px solid var(--secondary);
-            border-radius: 8px;
+            border: 1px solid #eee;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 10px;
-            font-weight: bold;
-            color: var(--secondary);
+            font-weight: 500;
+            color: #ccc;
         }
         .day.checked {
             background: var(--primary);
@@ -143,7 +152,9 @@
             <span id="percentText">0%</span>
         </div>
         <div class="progress-bar-bg">
-            <div class="progress-bar-fill" id="barFill">🎀</div>
+            <div class="progress-bar-fill" id="barFill">
+                <span class="bow-icon">🎀</span>
+            </div>
         </div>
     </div>
 
@@ -154,22 +165,22 @@
         </div>
         <div class="stat-card">
             <div class="stat-label">完成天數</div>
-            <div class="stat-value" id="progressDisplay">0/365</div>
+            <div class="stat-value" id="progressDisplay">0 天</div>
         </div>
     </div>
 
     <div class="extra-box">
-        <div class="stat-label" style="color:var(--accent); margin-bottom:8px;">🐰 額外加碼 🐰</div>
+        <div class="stat-label" style="color:var(--morandi-purple); margin-bottom:8px;">🐰 額外加碼 🐰</div>
         <input type="number" id="extraInput" placeholder="金額">
         <button onclick="addExtra()">OK</button>
-        <div id="extraRecord" style="font-size: 11px; margin-top: 8px; color: #999;"></div>
+        <div id="extraRecord" style="font-size: 11px; margin-top: 10px; color: var(--morandi-purple); opacity: 0.8;"></div>
     </div>
 
     <div class="grid" id="grid"></div>
 </div>
 <script>
-    let savedDays = JSON.parse(localStorage.getItem('v3_days') || '[]');
-    let extraMoney = parseInt(localStorage.getItem('v3_extra') || '0');
+    let savedDays = JSON.parse(localStorage.getItem('v4_days') || '[]');
+    let extraMoney = parseInt(localStorage.getItem('v4_extra') || '0');
 
     function update() {
         const gridSum = savedDays.reduce((a, b) => a + b, 0);
@@ -178,13 +189,13 @@
         const percent = Math.round((count / 365) * 100);
 
         document.getElementById('totalDisplay').innerText = '$' + total.toLocaleString();
-        document.getElementById('progressDisplay').innerText = count + ' 天';
+        document.getElementById('progressDisplay').innerText = count + ' / 365';
         document.getElementById('percentText').innerText = percent + '%';
         document.getElementById('barFill').style.width = percent + '%';
-        document.getElementById('extraRecord').innerText = '加碼累計：$' + extraMoney.toLocaleString();
+        document.getElementById('extraRecord').innerText = '目前加碼累計：$' + extraMoney.toLocaleString();
         
-        localStorage.setItem('v3_days', JSON.stringify(savedDays));
-        localStorage.setItem('v3_extra', extraMoney);
+        localStorage.setItem('v4_days', JSON.stringify(savedDays));
+        localStorage.setItem('v4_extra', extraMoney);
     }
 
     function addExtra() {
