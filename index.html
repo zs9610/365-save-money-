@@ -6,14 +6,14 @@
     <title>365存錢錢🍓</title>
     <style>
         :root {
-            --primary: #ff85a1; /* 草莓粉 */
+            --primary: #ff85a1; 
             --secondary: #fbb6ce;
-            --accent: #b794f4; /* 薰衣草紫 */
+            --accent: #b794f4; 
             --bg: #fff5f7;
             --text: #702459;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, sans-serif;
             background-color: var(--bg);
             background-image: radial-gradient(#ffd1dc 1px, transparent 1px);
             background-size: 20px 20px;
@@ -33,7 +33,7 @@
             box-shadow: 0 10px 25px rgba(255, 133, 161, 0.2);
             border: 4px solid var(--secondary);
         }
-        h1 { text-align: center; font-size: 24px; margin-bottom: 10px; }
+        h1 { text-align: center; font-size: 24px; color: var(--primary); }
         .stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -41,7 +41,7 @@
             margin-bottom: 20px;
         }
         .stat-card {
-            background: var(--bg);
+            background: #fff0f3;
             padding: 10px;
             border-radius: 15px;
             text-align: center;
@@ -59,7 +59,7 @@
             text-align: center;
         }
         input {
-            width: 60%;
+            width: 50%;
             padding: 10px;
             border-radius: 10px;
             border: 2px solid var(--secondary);
@@ -73,7 +73,6 @@
             padding: 10px 15px;
             border-radius: 10px;
             font-weight: bold;
-            cursor: pointer;
         }
         .grid {
             display: grid;
@@ -91,87 +90,63 @@
             font-size: 10px;
             font-weight: bold;
             color: var(--secondary);
-            transition: 0.2s;
         }
         .day.checked {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
-            transform: scale(0.9);
         }
     </style>
 </head>
 <body>
-
 <div class="container">
     <h1>🍓 365存錢錢 🍓</h1>
-    
     <div class="stats">
         <div class="stat-card">
-            <div class="stat-label">累積金額</div>
+            <div class="stat-label">累積總金額</div>
             <div class="stat-value" id="totalDisplay">$0</div>
         </div>
         <div class="stat-card">
-            <div class="stat-label">進度</div>
+            <div class="stat-label">完成天數</div>
             <div class="stat-value" id="progressDisplay">0/365</div>
         </div>
     </div>
-
     <div class="extra-box">
         <div class="stat-label" style="color:var(--accent); margin-bottom:8px;">🐰 額外加碼 🐰</div>
-        <input type="number" id="extraInput" placeholder="輸入加碼金額">
+        <input type="number" id="extraInput" placeholder="金額">
         <button onclick="addExtra()">OK</button>
         <div id="extraRecord" style="font-size: 11px; margin-top: 8px; color: #999;"></div>
     </div>
-
     <div class="grid" id="grid"></div>
 </div>
-
 <script>
-    let savedDays = JSON.parse(localStorage.getItem('365_days') || '[]');
-    let extraMoney = parseInt(localStorage.getItem('365_extra') || '0');
+    let savedDays = JSON.parse(localStorage.getItem('v2_days') || '[]');
+    let extraMoney = parseInt(localStorage.getItem('v2_extra') || '0');
 
-    function updateDisplay() {
-        const gridSum = savedDays.reduce((a, b) => a + b, 0);
-        const total = gridSum + extraMoney;
+    function update() {
+        const total = savedDays.reduce((a, b) => a + b, 0) + extraMoney;
         document.getElementById('totalDisplay').innerText = '$' + total.toLocaleString();
-        document.getElementById('progressDisplay').innerText = savedDays.length + '/365';
+        document.getElementById('progressDisplay').innerText = savedDays.length + ' 天';
         document.getElementById('extraRecord').innerText = '加碼累計：$' + extraMoney.toLocaleString();
-        
-        localStorage.setItem('365_days', JSON.stringify(savedDays));
-        localStorage.setItem('365_extra', extraMoney);
+        localStorage.setItem('v2_days', JSON.stringify(savedDays));
+        localStorage.setItem('v2_extra', extraMoney);
     }
-
     function addExtra() {
-        const input = document.getElementById('extraInput');
-        const val = parseInt(input.value);
-        if (val) {
-            extraMoney += val;
-            input.value = '';
-            updateDisplay();
-        }
+        const val = parseInt(document.getElementById('extraInput').value);
+        if (val) { extraMoney += val; document.getElementById('extraInput').value = ''; update(); }
     }
-
-    const grid = document.getElementById('grid');
     for (let i = 1; i <= 365; i++) {
         const div = document.createElement('div');
         div.className = 'day' + (savedDays.includes(i) ? ' checked' : '');
         div.innerText = i;
         div.onclick = () => {
-            if (savedDays.includes(i)) {
-                savedDays = savedDays.filter(d => d !== i);
-                div.classList.remove('checked');
-            } else {
-                savedDays.push(i);
-                div.classList.add('checked');
-            }
-            updateDisplay();
+            if (savedDays.includes(i)) { savedDays = savedDays.filter(d => d !== i); div.classList.remove('checked'); }
+            else { savedDays.push(i); div.classList.add('checked'); }
+            update();
         };
-        grid.appendChild(div);
+        document.getElementById('grid').appendChild(div);
     }
-
-    updateDisplay();
+    update();
 </script>
-
 </body>
 </html>
