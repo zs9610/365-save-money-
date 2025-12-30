@@ -2,180 +2,175 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>365天存錢挑戰計畫</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>365存錢錢🍓</title>
     <style>
         :root {
-            --primary-color: #ff8a80;
-            --secondary-color: #fce4ec;
-            --accent-color: #4db6ac;
-            --bg-color: #f5f7fa;
-            --text-color: #37474f;
+            --primary: #ff85a1; /* 草莓粉 */
+            --secondary: #fbb6ce;
+            --accent: #b794f4; /* 薰衣草紫 */
+            --bg: #fff5f7;
+            --text: #702459;
         }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(#ffd1dc 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text);
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items:center;
             padding: 20px;
             margin: 0;
         }
-
         .container {
-            max-width: 900px;
-            width: 100%;
             background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        h1 { text-align: center; color: var(--primary-color); margin-bottom: 10px; }
-        
-        /* 進度條樣式 */
-        .stats-card {
-            background: var(--secondary-color);
+            width: 100%;
+            max-width: 400px;
+            border-radius: 30px;
             padding: 20px;
+            box-shadow: 0 10px 25px rgba(255, 133, 161, 0.2);
+            border: 4px solid var(--secondary);
+        }
+        h1 { text-align: center; font-size: 24px; margin-bottom: 10px; }
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: var(--bg);
+            padding: 10px;
             border-radius: 15px;
-            margin-bottom: 25px;
-            display: flex;
-            justify-content: space-around;
+            text-align: center;
+            border: 2px solid var(--secondary);
+        }
+        .stat-label { font-size: 12px; color: var(--primary); font-weight: bold; }
+        .stat-value { font-size: 18px; font-weight: 900; }
+
+        .extra-box {
+            background: #fdf2ff;
+            border: 2px dashed var(--accent);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
             text-align: center;
         }
-
-        .stat-item span { display: block; font-size: 0.9em; color: #888; }
-        .stat-item strong { font-size: 1.5em; color: var(--primary-color); }
-
-        .progress-container {
-            width: 100%;
-            background: #eee;
+        input {
+            width: 60%;
+            padding: 10px;
             border-radius: 10px;
-            height: 20px;
-            margin-bottom: 30px;
-            overflow: hidden;
+            border: 2px solid var(--secondary);
+            outline: none;
+            font-size: 16px;
         }
-
-        #progress-bar {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-            transition: width 0.5s ease;
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
         }
-
-        /* 網格樣式 */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
-            gap: 8px;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
         }
-
-        .day-box {
+        .day {
             aspect-ratio: 1;
+            background: white;
+            border: 1px solid var(--secondary);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.8em;
-            transition: all 0.2s;
-            user-select: none;
+            font-size: 10px;
+            font-weight: bold;
+            color: var(--secondary);
+            transition: 0.2s;
         }
-
-        .day-box:hover { transform: scale(1.1); border-color: var(--primary-color); }
-        .day-box.checked {
-            background-color: var(--accent-color);
+        .day.checked {
+            background: var(--primary);
             color: white;
-            border-color: var(--accent-color);
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+            transform: scale(0.9);
         }
-
-        .footer { text-align: center; margin-top: 20px; font-size: 0.8em; color: #aaa; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>📅 365天存錢挑戰</h1>
+    <h1>🍓 365存錢錢 🍓</h1>
     
-    <div class="stats-card">
-        <div class="stat-item">
-            <span>累積金額</span>
-            <strong id="total-amount">$0</strong>
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-label">累積金額</div>
+            <div class="stat-value" id="totalDisplay">$0</div>
         </div>
-        <div class="stat-item">
-            <span>已完成天數</span>
-            <strong id="completed-days">0 / 365</strong>
-        </div>
-        <div class="stat-item">
-            <span>達成率</span>
-            <strong id="percent">0%</strong>
+        <div class="stat-card">
+            <div class="stat-label">進度</div>
+            <div class="stat-value" id="progressDisplay">0/365</div>
         </div>
     </div>
 
-    <div class="progress-container">
-        <div id="progress-bar"></div>
+    <div class="extra-box">
+        <div class="stat-label" style="color:var(--accent); margin-bottom:8px;">🐰 額外加碼 🐰</div>
+        <input type="number" id="extraInput" placeholder="輸入加碼金額">
+        <button onclick="addExtra()">OK</button>
+        <div id="extraRecord" style="font-size: 11px; margin-top: 8px; color: #999;"></div>
     </div>
 
-    <div class="grid" id="grid-container">
-        </div>
-
-    <div class="footer">
-        點擊方格標記完成，資料將自動儲存於此瀏覽器中。
-    </div>
+    <div class="grid" id="grid"></div>
 </div>
 
 <script>
-    const gridContainer = document.getElementById('grid-container');
-    const totalAmountEl = document.getElementById('total-amount');
-    const completedDaysEl = document.getElementById('completed-days');
-    const percentEl = document.getElementById('percent');
-    const progressBar = document.getElementById('progress-bar');
+    let savedDays = JSON.parse(localStorage.getItem('365_days') || '[]');
+    let extraMoney = parseInt(localStorage.getItem('365_extra') || '0');
 
-    // 從 LocalStorage 讀取已儲存的資料
-    let savedData = JSON.parse(localStorage.getItem('saveMoneyChallenge')) || [];
+    function updateDisplay() {
+        const gridSum = savedDays.reduce((a, b) => a + b, 0);
+        const total = gridSum + extraMoney;
+        document.getElementById('totalDisplay').innerText = '$' + total.toLocaleString();
+        document.getElementById('progressDisplay').innerText = savedDays.length + '/365';
+        document.getElementById('extraRecord').innerText = '加碼累計：$' + extraMoney.toLocaleString();
+        
+        localStorage.setItem('365_days', JSON.stringify(savedDays));
+        localStorage.setItem('365_extra', extraMoney);
+    }
 
-    function init() {
-        for (let i = 1; i <= 365; i++) {
-            const box = document.createElement('div');
-            box.classList.add('day-box');
-            if (savedData.includes(i)) box.classList.add('checked');
-            box.textContent = i;
-            
-            box.onclick = () => toggleDay(i, box);
-            gridContainer.appendChild(box);
+    function addExtra() {
+        const input = document.getElementById('extraInput');
+        const val = parseInt(input.value);
+        if (val) {
+            extraMoney += val;
+            input.value = '';
+            updateDisplay();
         }
-        updateStats();
     }
 
-    function toggleDay(day, element) {
-        if (savedData.includes(day)) {
-            savedData = savedData.filter(d => d !== day);
-            element.classList.remove('checked');
-        } else {
-            savedData.push(day);
-            element.classList.add('checked');
-        }
-        localStorage.setItem('saveMoneyChallenge', JSON.stringify(savedData));
-        updateStats();
+    const grid = document.getElementById('grid');
+    for (let i = 1; i <= 365; i++) {
+        const div = document.createElement('div');
+        div.className = 'day' + (savedDays.includes(i) ? ' checked' : '');
+        div.innerText = i;
+        div.onclick = () => {
+            if (savedDays.includes(i)) {
+                savedDays = savedDays.filter(d => d !== i);
+                div.classList.remove('checked');
+            } else {
+                savedDays.push(i);
+                div.classList.add('checked');
+            }
+            updateDisplay();
+        };
+        grid.appendChild(div);
     }
 
-    function updateStats() {
-        const count = savedData.length;
-        const total = savedData.reduce((sum, val) => sum + val, 0);
-        const percentage = ((count / 365) * 100).toFixed(1);
-
-        totalAmountEl.textContent = `$${total.toLocaleString()}`;
-        completedDaysEl.textContent = `${count} / 365`;
-        percentEl.textContent = `${percentage}%`;
-        progressBar.style.width = `${percentage}%`;
-    }
-
-    init();
+    updateDisplay();
 </script>
 
 </body>
