@@ -10,7 +10,7 @@
             --secondary: #fbb6ce;
             --morandi-purple: #9a8c98; /* 莫蘭迪灰紫 */
             --bg: #fff5f7;
-            --text: #4a4e69; /* 莫蘭迪深灰藍 */
+            --text: #4a4e69; 
         }
         body {
             font-family: -apple-system, sans-serif;
@@ -31,17 +31,16 @@
             border-radius: 30px;
             padding: 25px;
             box-shadow: 0 10px 25px rgba(255, 133, 161, 0.15);
-            border: 3px solid var(--secondary); /* 實線 */
+            border: 3px solid var(--secondary);
         }
         h1 { text-align: center; font-size: 22px; color: var(--primary); margin-bottom: 20px; letter-spacing: 2px; }
         
-        /* 細版進度條 */
         .progress-section {
             margin-bottom: 25px;
             padding: 12px;
             background: #fff9fa;
             border-radius: 15px;
-            border: 1px solid var(--secondary); /* 實線 */
+            border: 1px solid var(--secondary);
         }
         .progress-text {
             display: flex;
@@ -51,11 +50,12 @@
             margin-bottom: 8px;
             font-size: 13px;
         }
+        /* 極細進度條 */
         .progress-bar-bg {
             background: #f0f0f0;
-            height: 8px; /* 調細進度條 */
+            height: 6px; 
             border-radius: 10px;
-            overflow: visible; /* 讓蝴蝶結可以突出來 */
+            overflow: visible; 
             position: relative;
             border: 1px solid #e0e0e0;
         }
@@ -70,7 +70,7 @@
         .bow-icon {
             position: absolute;
             right: -10px;
-            top: -8px;
+            top: -9px;
             font-size: 16px;
         }
 
@@ -85,15 +85,14 @@
             padding: 12px;
             border-radius: 15px;
             text-align: center;
-            border: 1px solid var(--secondary); /* 實線 */
+            border: 1px solid var(--secondary);
         }
         .stat-label { font-size: 11px; color: var(--morandi-purple); font-weight: bold; margin-bottom: 4px; }
         .stat-value { font-size: 16px; font-weight: 900; color: var(--primary); }
 
-        /* 莫蘭迪灰紫加碼區 */
         .extra-box {
             background: #f4f4f9;
-            border: 2px solid var(--morandi-purple); /* 莫蘭迪實線 */
+            border: 2px solid var(--morandi-purple); 
             border-radius: 18px;
             padding: 15px;
             margin-bottom: 25px;
@@ -106,7 +105,6 @@
             border: 1px solid var(--morandi-purple);
             outline: none;
             font-size: 15px;
-            color: var(--text);
             background: white;
         }
         button {
@@ -145,7 +143,6 @@
 <body>
 <div class="container">
     <h1>🍓 365存錢錢 🍓</h1>
-
     <div class="progress-section">
         <div class="progress-text">
             <span>完成比率</span>
@@ -157,7 +154,6 @@
             </div>
         </div>
     </div>
-
     <div class="stats">
         <div class="stat-card">
             <div class="stat-label">累積總金額</div>
@@ -165,44 +161,37 @@
         </div>
         <div class="stat-card">
             <div class="stat-label">完成天數</div>
-            <div class="stat-value" id="progressDisplay">0 天</div>
+            <div class="stat-value" id="progressDisplay">0 / 365</div>
         </div>
     </div>
-
     <div class="extra-box">
         <div class="stat-label" style="color:var(--morandi-purple); margin-bottom:8px;">🐰 額外加碼 🐰</div>
         <input type="number" id="extraInput" placeholder="金額">
         <button onclick="addExtra()">OK</button>
         <div id="extraRecord" style="font-size: 11px; margin-top: 10px; color: var(--morandi-purple); opacity: 0.8;"></div>
     </div>
-
     <div class="grid" id="grid"></div>
 </div>
 <script>
-    let savedDays = JSON.parse(localStorage.getItem('v4_days') || '[]');
-    let extraMoney = parseInt(localStorage.getItem('v4_extra') || '0');
-
+    let savedDays = JSON.parse(localStorage.getItem('v5_days') || '[]');
+    let extraMoney = parseInt(localStorage.getItem('v5_extra') || '0');
     function update() {
         const gridSum = savedDays.reduce((a, b) => a + b, 0);
         const total = gridSum + extraMoney;
         const count = savedDays.length;
         const percent = Math.round((count / 365) * 100);
-
         document.getElementById('totalDisplay').innerText = '$' + total.toLocaleString();
-        document.getElementById('progressDisplay').innerText = count + ' / 365';
+        document.getElementById('progressDisplay').innerText = count + ' 天';
         document.getElementById('percentText').innerText = percent + '%';
         document.getElementById('barFill').style.width = percent + '%';
         document.getElementById('extraRecord').innerText = '目前加碼累計：$' + extraMoney.toLocaleString();
-        
-        localStorage.setItem('v4_days', JSON.stringify(savedDays));
-        localStorage.setItem('v4_extra', extraMoney);
+        localStorage.setItem('v5_days', JSON.stringify(savedDays));
+        localStorage.setItem('v5_extra', extraMoney);
     }
-
     function addExtra() {
         const val = parseInt(document.getElementById('extraInput').value);
         if (val) { extraMoney += val; document.getElementById('extraInput').value = ''; update(); }
     }
-
     for (let i = 1; i <= 365; i++) {
         const div = document.createElement('div');
         div.className = 'day' + (savedDays.includes(i) ? ' checked' : '');
