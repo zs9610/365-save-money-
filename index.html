@@ -6,14 +6,15 @@
     <title>365存錢錢🍓</title>
     <style>
         :root {
-            --primary: #ff85a1; 
-            --secondary: #fbb6ce;
-            --morandi-purple: #9a8c98; /* 莫蘭迪灰紫 */
+            --primary: #ff85a1; /* 你最喜歡的草莓粉 */
+            --secondary: #fbb6ce; /* 淺粉紅 */
+            --lavender: #d8b4fe; /* 溫柔薰衣草紫 */
+            --lavender-dark: #a855f7;
             --bg: #fff5f7;
-            --text: #4a4e69; 
+            --text: #702459;
         }
         body {
-            font-family: -apple-system, sans-serif;
+            font-family: "Microsoft JhengHei", -apple-system, sans-serif;
             background-color: var(--bg);
             background-image: radial-gradient(#ffd1dc 1px, transparent 1px);
             background-size: 20px 20px;
@@ -30,48 +31,50 @@
             max-width: 400px;
             border-radius: 30px;
             padding: 25px;
-            box-shadow: 0 10px 25px rgba(255, 133, 161, 0.15);
+            box-shadow: 0 10px 25px rgba(255, 133, 161, 0.2);
             border: 3px solid var(--secondary);
         }
-        h1 { text-align: center; font-size: 22px; color: var(--primary); margin-bottom: 20px; letter-spacing: 2px; }
+        h1 { text-align: center; font-size: 26px; color: var(--primary); margin-bottom: 20px; font-weight: bold; }
         
+        /* 優化後的進度條容器 */
         .progress-section {
-            margin-bottom: 25px;
-            padding: 12px;
+            margin: 0 auto 25px auto;
+            width: 90%; /* 稍微縮短 */
+            padding: 15px 12px; /* 增加高度讓蝴蝶結不穿幫 */
             background: #fff9fa;
-            border-radius: 15px;
-            border: 1px solid var(--secondary);
+            border-radius: 20px;
+            border: 2px solid var(--secondary);
+            position: relative;
         }
         .progress-text {
             display: flex;
             justify-content: space-between;
             font-weight: bold;
             color: var(--primary);
-            margin-bottom: 8px;
-            font-size: 13px;
+            margin-bottom: 12px;
+            font-size: 15px;
         }
-        /* 極細進度條 */
         .progress-bar-bg {
-            background: #f0f0f0;
-            height: 6px; 
+            background: #f3f4f6;
+            height: 12px; 
             border-radius: 10px;
-            overflow: visible; 
             position: relative;
-            border: 1px solid #e0e0e0;
+            border: 1px solid #e5e7eb;
         }
         .progress-bar-fill {
-            background: var(--secondary);
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
             height: 100%;
             width: 0%;
             border-radius: 10px;
             position: relative;
-            transition: width 0.5s ease;
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .bow-icon {
             position: absolute;
-            right: -10px;
-            top: -9px;
-            font-size: 16px;
+            right: -15px;
+            top: -12px;
+            font-size: 24px; /* 大蝴蝶結 */
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
         }
 
         .stats {
@@ -81,18 +84,18 @@
             margin-bottom: 20px;
         }
         .stat-card {
-            background: #fffafa;
+            background: #fff0f3;
             padding: 12px;
             border-radius: 15px;
             text-align: center;
-            border: 1px solid var(--secondary);
+            border: 2px solid var(--secondary);
         }
-        .stat-label { font-size: 11px; color: var(--morandi-purple); font-weight: bold; margin-bottom: 4px; }
-        .stat-value { font-size: 16px; font-weight: 900; color: var(--primary); }
+        .stat-label { font-size: 13px; color: var(--primary); font-weight: bold; margin-bottom: 4px; }
+        .stat-value { font-size: 18px; font-weight: 900; color: var(--primary); }
 
         .extra-box {
-            background: #f4f4f9;
-            border: 2px solid var(--morandi-purple); 
+            background: #faf5ff;
+            border: 2px solid var(--lavender); 
             border-radius: 18px;
             padding: 15px;
             margin-bottom: 25px;
@@ -102,13 +105,13 @@
             width: 45%;
             padding: 8px 12px;
             border-radius: 10px;
-            border: 1px solid var(--morandi-purple);
+            border: 1.5px solid var(--lavender);
             outline: none;
             font-size: 15px;
-            background: white;
+            color: var(--text);
         }
         button {
-            background: var(--morandi-purple);
+            background: var(--lavender);
             color: white;
             border: none;
             padding: 8px 18px;
@@ -124,14 +127,14 @@
         .day {
             aspect-ratio: 1;
             background: white;
-            border: 1px solid #eee;
-            border-radius: 6px;
+            border: 1px solid var(--secondary);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
-            font-weight: 500;
-            color: #ccc;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--secondary);
         }
         .day.checked {
             background: var(--primary);
@@ -161,20 +164,20 @@
         </div>
         <div class="stat-card">
             <div class="stat-label">完成天數</div>
-            <div class="stat-value" id="progressDisplay">0 / 365</div>
+            <div class="stat-value" id="progressDisplay">0 天</div>
         </div>
     </div>
     <div class="extra-box">
-        <div class="stat-label" style="color:var(--morandi-purple); margin-bottom:8px;">🐰 額外加碼 🐰</div>
+        <div class="stat-label" style="color:var(--lavender-dark); margin-bottom:8px;">🐰 額外加碼 🐰</div>
         <input type="number" id="extraInput" placeholder="金額">
         <button onclick="addExtra()">OK</button>
-        <div id="extraRecord" style="font-size: 11px; margin-top: 10px; color: var(--morandi-purple); opacity: 0.8;"></div>
+        <div id="extraRecord" style="font-size: 11px; margin-top: 10px; color: var(--lavender-dark); opacity: 0.8;"></div>
     </div>
     <div class="grid" id="grid"></div>
 </div>
 <script>
-    let savedDays = JSON.parse(localStorage.getItem('v5_days') || '[]');
-    let extraMoney = parseInt(localStorage.getItem('v5_extra') || '0');
+    let savedDays = JSON.parse(localStorage.getItem('v7_days') || '[]');
+    let extraMoney = parseInt(localStorage.getItem('v7_extra') || '0');
     function update() {
         const gridSum = savedDays.reduce((a, b) => a + b, 0);
         const total = gridSum + extraMoney;
@@ -184,9 +187,9 @@
         document.getElementById('progressDisplay').innerText = count + ' 天';
         document.getElementById('percentText').innerText = percent + '%';
         document.getElementById('barFill').style.width = percent + '%';
-        document.getElementById('extraRecord').innerText = '目前加碼累計：$' + extraMoney.toLocaleString();
-        localStorage.setItem('v5_days', JSON.stringify(savedDays));
-        localStorage.setItem('v5_extra', extraMoney);
+        document.getElementById('extraRecord').innerText = '加碼累計：$' + extraMoney.toLocaleString();
+        localStorage.setItem('v7_days', JSON.stringify(savedDays));
+        localStorage.setItem('v7_extra', extraMoney);
     }
     function addExtra() {
         const val = parseInt(document.getElementById('extraInput').value);
