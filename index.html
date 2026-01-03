@@ -6,9 +6,9 @@
     <title>365存錢錢🍓</title>
     <style>
         :root {
-            --primary: #ff85a1; /* 你最喜歡的草莓粉 */
-            --secondary: #fbb6ce; /* 淺粉紅 */
-            --lavender: #d8b4fe; /* 溫柔薰衣草紫 */
+            --primary: #ff85a1; 
+            --secondary: #fbb6ce;
+            --lavender: #d8b4fe; 
             --lavender-dark: #a855f7;
             --bg: #fff5f7;
             --text: #702459;
@@ -33,14 +33,14 @@
             padding: 25px;
             box-shadow: 0 10px 25px rgba(255, 133, 161, 0.2);
             border: 3px solid var(--secondary);
+            position: relative;
         }
         h1 { text-align: center; font-size: 26px; color: var(--primary); margin-bottom: 20px; font-weight: bold; }
         
-        /* 優化後的進度條容器 */
         .progress-section {
             margin: 0 auto 25px auto;
-            width: 90%; /* 稍微縮短 */
-            padding: 15px 12px; /* 增加高度讓蝴蝶結不穿幫 */
+            width: 90%;
+            padding: 15px 12px;
             background: #fff9fa;
             border-radius: 20px;
             border: 2px solid var(--secondary);
@@ -73,7 +73,7 @@
             position: absolute;
             right: -15px;
             top: -12px;
-            font-size: 24px; /* 大蝴蝶結 */
+            font-size: 24px;
             filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
         }
 
@@ -98,27 +98,41 @@
             border: 2px solid var(--lavender); 
             border-radius: 18px;
             padding: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             text-align: center;
         }
         input {
             width: 45%;
-            padding: 8px 12px;
+            padding: 8px 10px;
             border-radius: 10px;
             border: 1.5px solid var(--lavender);
             outline: none;
             font-size: 15px;
-            color: var(--text);
         }
-        button {
+        .btn-ok {
             background: var(--lavender);
             color: white;
             border: none;
-            padding: 8px 18px;
+            padding: 8px 20px;
             border-radius: 10px;
             font-weight: bold;
-            margin-left: 5px;
         }
+
+        .action-btns {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .btn-history {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 6px 18px; /* 稍微變小一點 */
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -141,11 +155,94 @@
             color: white;
             border-color: var(--primary);
         }
+
+        /* 紀錄視窗優化 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 360px;
+        }
+        .modal-content {
+            background: white;
+            width: 100%;
+            border-radius: 25px;
+            padding: 20px;
+            max-height: 65vh;
+            overflow-y: auto;
+            border: 3px solid var(--primary);
+            box-sizing: border-box;
+        }
+        .modal-title {
+            color: var(--primary);
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 10px;
+        }
+        .history-item {
+            display: flex;
+            flex-direction: column;
+            padding: 12px 5px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .history-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .history-bottom {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .history-type { font-weight: bold; font-size: 15px; }
+        .type-save { color: var(--primary); }      /* 存錢粉色 */
+        .type-extra { color: var(--lavender-dark); } /* 加碼紫色 */
+        
+        .history-date { font-size: 12px; color: #aaa; background: #f8f8f8; padding: 2px 8px; border-radius: 5px; }
+        .btn-edit-date {
+            background: none;
+            border: 1px solid var(--lavender);
+            color: var(--lavender-dark);
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .btn-del-single { background: none; border: none; font-size: 18px; cursor: pointer; padding: 0; }
+        
+        /* 關閉按鈕移到視窗外面 */
+        .btn-close-outer {
+            margin-top: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 40px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>🍓 365存錢錢 🍓</h1>
+    
     <div class="progress-section">
         <div class="progress-text">
             <span>完成比率</span>
@@ -157,6 +254,7 @@
             </div>
         </div>
     </div>
+
     <div class="stats">
         <div class="stat-card">
             <div class="stat-label">累積總金額</div>
@@ -167,44 +265,146 @@
             <div class="stat-value" id="progressDisplay">0 天</div>
         </div>
     </div>
+
     <div class="extra-box">
         <div class="stat-label" style="color:var(--lavender-dark); margin-bottom:8px;">🐰 額外加碼 🐰</div>
         <input type="number" id="extraInput" placeholder="金額">
-        <button onclick="addExtra()">OK</button>
-        <div id="extraRecord" style="font-size: 11px; margin-top: 10px; color: var(--lavender-dark); opacity: 0.8;"></div>
+        <button class="btn-ok" onclick="addExtra()">OK</button>
     </div>
+
+    <div class="action-btns">
+        <button class="btn-history" onclick="toggleModal(true)">📋 查看紀錄</button>
+    </div>
+
     <div class="grid" id="grid"></div>
 </div>
+
+<div id="historyModal" class="modal">
+    <div class="modal-wrapper">
+        <div class="modal-content">
+            <div class="modal-title">📖 存錢小本本</div>
+            <div id="historyList"></div>
+        </div>
+        <button class="btn-close-outer" onclick="toggleModal(false)">關閉</button>
+    </div>
+</div>
+
 <script>
-    let savedDays = JSON.parse(localStorage.getItem('v7_days') || '[]');
-    let extraMoney = parseInt(localStorage.getItem('v7_extra') || '0');
+    let savedDays = JSON.parse(localStorage.getItem('v12_days') || '[]');
+    let extraMoney = parseInt(localStorage.getItem('v12_extra') || '0');
+    let logs = JSON.parse(localStorage.getItem('v12_logs') || '[]');
+
     function update() {
         const gridSum = savedDays.reduce((a, b) => a + b, 0);
         const total = gridSum + extraMoney;
         const count = savedDays.length;
         const percent = Math.round((count / 365) * 100);
+
         document.getElementById('totalDisplay').innerText = '$' + total.toLocaleString();
         document.getElementById('progressDisplay').innerText = count + ' 天';
         document.getElementById('percentText').innerText = percent + '%';
         document.getElementById('barFill').style.width = percent + '%';
-        document.getElementById('extraRecord').innerText = '加碼累計：$' + extraMoney.toLocaleString();
-        localStorage.setItem('v7_days', JSON.stringify(savedDays));
-        localStorage.setItem('v7_extra', extraMoney);
+        
+        localStorage.setItem('v12_days', JSON.stringify(savedDays));
+        localStorage.setItem('v12_extra', extraMoney);
+        localStorage.setItem('v12_logs', JSON.stringify(logs));
+        renderLogs();
     }
+
+    function addLog(type, amount, dayNum = null) {
+        const now = new Date();
+        const dateStr = `${now.getMonth()+1}/${now.getDate()}`;
+        const displayName = type === '存錢' ? '存錢錢' : '加碼';
+        logs.unshift({ type: displayName, amount, date: dateStr, dayNum, id: Date.now() });
+        update();
+    }
+
     function addExtra() {
-        const val = parseInt(document.getElementById('extraInput').value);
-        if (val) { extraMoney += val; document.getElementById('extraInput').value = ''; update(); }
+        const input = document.getElementById('extraInput');
+        const val = parseInt(input.value);
+        if (val) { 
+            extraMoney += val; 
+            addLog('加碼', val);
+            input.value = ''; 
+        }
     }
+
+    function editLogDate(id) {
+        const idx = logs.findIndex(l => l.id === id);
+        if (idx > -1) {
+            const newDate = prompt("請輸入新日期 (例如: 1/2)", logs[idx].date);
+            if (newDate) {
+                logs[idx].date = newDate;
+                update();
+            }
+        }
+    }
+
+    function deleteSingleLog(id) {
+        const idx = logs.findIndex(l => l.id === id);
+        if (idx > -1) {
+            const item = logs[idx];
+            if (item.type === '存錢錢') {
+                savedDays = savedDays.filter(d => d !== item.dayNum);
+                const dayEl = document.getElementById('day-' + item.dayNum);
+                if(dayEl) dayEl.classList.remove('checked');
+            } else if (item.type === '加碼') {
+                extraMoney -= item.amount;
+            }
+            logs.splice(idx, 1);
+            update();
+        }
+    }
+
+    function renderLogs() {
+        const list = document.getElementById('historyList');
+        if (logs.length === 0) {
+            list.innerHTML = '<div style="text-align:center; color:#ccc; margin-top:30px;">尚無紀錄 🍓</div>';
+            return;
+        }
+        list.innerHTML = logs.map(l => {
+            const typeClass = l.type === '存錢錢' ? 'type-save' : 'type-extra';
+            const amountColor = l.type === '存錢錢' ? 'var(--primary)' : 'var(--lavender-dark)';
+            return `
+            <div class="history-item">
+                <div class="history-top">
+                    <span class="history-type ${typeClass}">${l.type}</span>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="color:${amountColor}; font-weight:800;">+$${l.amount.toLocaleString()}</span>
+                        <button class="btn-del-single" onclick="deleteSingleLog(${l.id})">🗑️</button>
+                    </div>
+                </div>
+                <div class="history-bottom">
+                    <span class="history-date">${l.date}</span>
+                    <button class="btn-edit-date" onclick="editLogDate(${l.id})">📅 修改日期</button>
+                </div>
+            </div>
+        `; }).join('');
+    }
+
+    function toggleModal(show) {
+        document.getElementById('historyModal').style.display = show ? 'flex' : 'none';
+    }
+
+    const grid = document.getElementById('grid');
     for (let i = 1; i <= 365; i++) {
         const div = document.createElement('div');
+        div.id = 'day-' + i;
         div.className = 'day' + (savedDays.includes(i) ? ' checked' : '');
         div.innerText = i;
         div.onclick = () => {
-            if (savedDays.includes(i)) { savedDays = savedDays.filter(d => d !== i); div.classList.remove('checked'); }
-            else { savedDays.push(i); div.classList.add('checked'); }
+            if (savedDays.includes(i)) {
+                savedDays = savedDays.filter(d => d !== i);
+                logs = logs.filter(l => !(l.type === '存錢錢' && l.dayNum === i));
+                div.classList.remove('checked');
+            } else {
+                savedDays.push(i);
+                addLog('存錢', i, i);
+                div.classList.add('checked');
+            }
             update();
         };
-        document.getElementById('grid').appendChild(div);
+        grid.appendChild(div);
     }
     update();
 </script>
